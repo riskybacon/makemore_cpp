@@ -10,3 +10,5 @@ To run:
 make
 ./pt1_one_layer
 ```
+
+This code is intentionally unoptimized and favors correctness over speed.

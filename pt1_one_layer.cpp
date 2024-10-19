@@ -12,8 +12,8 @@ struct Model {
     matrix_type xenc;
     matrix_type counts;
     matrix_type logits;
-    vector_type counts_sum;
-    vector_type counts_sum_inv;
+    matrix_type counts_sum;
+    matrix_type counts_sum_inv;
     matrix_type probs;
 
     Model(size_t vocab_size, std::mt19937 gen) : vocab_size(vocab_size), gen(gen) {
@@ -32,15 +32,15 @@ struct Model {
 
     void backward(matrix_type &dlogprobs) {
         matrix_type dprobs = matmul_eltwise(pow(probs, -1.0f), dlogprobs);
-        vector_type dcounts_sum_inv = matrix_sum_rows(matmul_eltwise(counts, dprobs));
+        matrix_type dcounts_sum_inv = matrix_sum_rows(matmul_eltwise(counts, dprobs));
         matrix_type dcounts0 = matmul_eltwise_broadcast(dprobs, counts_sum_inv);
-        vector_type dcounts_sum = pow(counts_sum, -2);
+        matrix_type dcounts_sum = pow(counts_sum, -2);
         for (size_t i = 0; i < dcounts_sum.size(); i++) {
-            dcounts_sum[i] = -1.0 * dcounts_sum[i] * dcounts_sum_inv[i];
+            dcounts_sum[i][0] = -1.0 * dcounts_sum[i][0] * dcounts_sum_inv[i][0];
         }
 
         matrix_type dcounts_sum_bcast = matmul_eltwise_broadcast(matrix_ones_like(counts), dcounts_sum);
-        matrix_type dcounts1 = matadd_eltwise(dcounts0, dcounts_sum_bcast);
+        matrix_type dcounts1 = matadd(dcounts0, dcounts_sum_bcast);
 
         matrix_type dlogits = matmul_eltwise(counts, dcounts1);
         matrix_type xenc_t = transpose(xenc);
@@ -117,10 +117,6 @@ int main(void) {
     size_t num_steps = 1000;
 
     for (size_t k = 0; k < num_steps; k++) {
-        if (lr > 0.01 and k > 0 && k % 100 == 0) {
-            lr /= 10;
-        }
-
         matrix_type probs = model.forward(xs);
         auto [logprobs, loss] = loss_module.forward(probs, ys);
 

@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# Misc
+build/
+.vscode/
+*.dSYM/
+.DS_Store
+*.dot
+*.png
+TODO.md
+pt1_one_layer

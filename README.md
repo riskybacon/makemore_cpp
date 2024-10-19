@@ -7,9 +7,11 @@ The project provides a simplified implementation of common ML components, allowi
 
 🚀 Features
 
-Basic Operations: Matrix operations like addition, multiplication, transpose, and elementwise transformations.
-Manual backward pass: no autograd
-Simple: no external libraries, training code is 
+*Basic Operations*: Matrix operations like addition, multiplication, transpose, and elementwise transformations.
+
+*Manual backward pass*: no autograd
+
+*Simple*: no external libraries, code is easy to read
 
 🛠️ Build and run
 
@@ -28,6 +30,7 @@ make
 🧪 Examples
 
 Basic Operations: See common.hpp for matrix operations.
+
 Single layer model: see pt1_one_layer.cpp for the single layer / bag of words model
 
 🤝 Contributing

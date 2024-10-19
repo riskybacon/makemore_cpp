@@ -471,6 +471,25 @@ matrix_type matrix_sum_rows(const matrix_type &mat) {
     return out;
 }
 
+/**
+ * @brief Applies the exponential function to each element of a matrix.
+ * 
+ * This function takes an input matrix and returns a new matrix of the same dimensions, 
+ * where each element is the result of applying the exponential function (e^x) to the 
+ * corresponding element in the input matrix.
+ * 
+ * For an input matrix `lhs` of dimensions (m x n), the resulting matrix will also 
+ * have dimensions (m x n), where each element is calculated as:
+ * 
+ * \f[
+ * C_{ij} = e^{A_{ij}}
+ * \f]
+ * 
+ * @param lhs The input matrix (vector of vectors of floats) to be exponentiated.
+ * 
+ * @return A matrix (vector of vectors of floats) of the same dimensions as `lhs`, 
+ *         where each element is the exponential of the corresponding element in `lhs`.
+ */
 matrix_type exp(const matrix_type &lhs) {
     const size_t rows = lhs.size();
     const size_t cols = lhs[0].size();
@@ -486,6 +505,27 @@ matrix_type exp(const matrix_type &lhs) {
     return result;
 }
 
+/**
+ * @brief Raises each element of a matrix to the power of a given exponent.
+ * 
+ * This function takes an input matrix and returns a new matrix of the same dimensions, 
+ * where each element is raised to the power of the provided exponent `y`. 
+ * The operation performed is equivalent to applying the `std::pow()` function to each 
+ * element in the input matrix.
+ * 
+ * For an input matrix `lhs` of dimensions (m x n) and an exponent `y`, the resulting 
+ * matrix will also have dimensions (m x n), where each element is calculated as:
+ * 
+ * \f[
+ * C_{ij} = A_{ij}^y
+ * \f]
+ * 
+ * @param lhs The input matrix (vector of vectors of floats) whose elements will be exponentiated.
+ * @param y The exponent to which each element in the matrix `lhs` will be raised.
+ * 
+ * @return A matrix (vector of vectors of floats) of the same dimensions as `lhs`, 
+ *         where each element is the result of raising the corresponding element in `lhs` to the power `y`.
+ */
 matrix_type pow(const matrix_type &lhs, float y) {
     const size_t rows = lhs.size();
     const size_t cols = lhs[0].size();
@@ -500,6 +540,28 @@ matrix_type pow(const matrix_type &lhs, float y) {
     return out;
 }
 
+/**
+ * @brief Applies the natural logarithm to each element of a matrix.
+ * 
+ * This function takes an input matrix and returns a new matrix of the same dimensions, 
+ * where each element is transformed by the natural logarithm function (`std::log()`).
+ * 
+ * For an input matrix `lhs` of dimensions (m x n), the resulting matrix will also 
+ * have dimensions (m x n), where each element is calculated as:
+ * 
+ * \f[
+ * C_{ij} = \log(A_{ij})
+ * \f]
+ * 
+ * @param lhs The input matrix (vector of vectors of floats) whose elements will have the 
+ *            natural logarithm applied.
+ * 
+ * @return A matrix (vector of vectors of floats) of the same dimensions as `lhs`, 
+ *         where each element is the natural logarithm of the corresponding element in `lhs`.
+ * 
+ * @note The function assumes that all elements in the input matrix are positive, as 
+ *       the natural logarithm is undefined for non-positive values.
+ */
 matrix_type log(const matrix_type &lhs) {
     const size_t rows = lhs.size();
     const size_t cols = lhs[0].size();

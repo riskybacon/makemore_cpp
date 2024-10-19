@@ -1,3 +1,7 @@
+/**
+ * @file pt1_one_layer.cpp
+ * @brief C++ implementation of the single layer NN in makemore
+ */
 #include <iostream>
 #include <random>
 #include <vector>
@@ -73,20 +77,8 @@ struct Loss {
     }
 };
 
-int main(void) {
-    std::string filename = "names.txt";
-
-    auto [words, stoi, itos, chars] = read_file(filename);
-
-    std::random_device rd;
-    std::mt19937 g(rd());
-    g.seed(INT_MAX);
-
-    auto vocab_size = itos.size();
-
-    std::cout << "vocab_size=" << vocab_size << std::endl;
-    std::cout << "words=" << words.size() << std::endl;
-
+std::tuple<std::vector<int>, std::vector<int>> build_dataset(const std::vector<std::string> &words,
+                                                             const std::unordered_map<char, int> &stoi) {
     std::vector<int> xs;
     std::vector<int> ys;
 
@@ -101,14 +93,29 @@ int main(void) {
         for (size_t i = 0; i < chs.size() - 1; i++) {
             const auto ch1 = chs[i];
             const auto ch2 = chs[i + 1];
-            const auto ix1 = stoi[ch1];
-            const auto ix2 = stoi[ch2];
+            const auto ix1 = stoi.at(ch1);
+            const auto ix2 = stoi.at(ch2);
             xs.push_back(ix1);
             ys.push_back(ix2);
         }
     }
 
+    return {xs, ys};
+}
+
+int main(void) {
+    std::string filename = "names.txt";
+    auto [words, stoi, itos, chars] = read_file(filename);
+    auto [xs, ys] = build_dataset(words, stoi);
+
+    const auto vocab_size = itos.size();
+    std::cout << "vocab_size=" << vocab_size << std::endl;
+    std::cout << "words=" << words.size() << std::endl;
     std::cout << "xs.size()=" << xs.size() << ", ys.size()=" << ys.size() << std::endl;
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    g.seed(INT_MAX);
 
     Model model(vocab_size, g);
     Loss loss_module;
@@ -116,6 +123,7 @@ int main(void) {
     float lr = 10.0;
     size_t num_steps = 1000;
 
+    // Training
     for (size_t k = 0; k < num_steps; k++) {
         // Forward
         matrix_type probs = model.forward(xs);
@@ -139,8 +147,8 @@ int main(void) {
         }
     }
 
+    // Eval
     std::cout << std::endl << "Eval:" << std::endl;
-
     for (size_t i = 0; i < 20; i++) {
         std::vector<char> out;
         int ix = 0;

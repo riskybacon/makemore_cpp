@@ -364,7 +364,6 @@ matrix_type matmul_eltwise(const matrix_type &lhs, const matrix_type &rhs) {
  *
  * @throws std::invalid_argument if the number of rows in `lhs` does not match the number of rows in `rhs`.
  */
-// TODO: change rhs to matrix_type in docstring
 matrix_type matmul_eltwise_broadcast(const matrix_type &lhs, const matrix_type &rhs) {
     const size_t lhs_rows = lhs.size();
     const size_t lhs_cols = lhs[0].size();

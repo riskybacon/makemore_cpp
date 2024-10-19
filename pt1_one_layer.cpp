@@ -117,13 +117,17 @@ int main(void) {
     size_t num_steps = 1000;
 
     for (size_t k = 0; k < num_steps; k++) {
+        // Forward
         matrix_type probs = model.forward(xs);
+
+        // Loss
         auto [logprobs, loss] = loss_module.forward(probs, ys);
 
         if (k % 10 == 0 || k == num_steps - 1) {
             std::cout << "step: " << k << "/" << num_steps - 1 << ": lr=" << lr << ", loss=" << loss << std::endl;
         }
 
+        // Backward
         matrix_type dlogprobs = loss_module.backward(logprobs, ys);
         model.backward(dlogprobs);
 
@@ -137,7 +141,7 @@ int main(void) {
 
     std::cout << std::endl << "Eval:" << std::endl;
 
-    for (size_t i = 0; i < 5; i++) {
+    for (size_t i = 0; i < 20; i++) {
         std::vector<char> out;
         int ix = 0;
 
